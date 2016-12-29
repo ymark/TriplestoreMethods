@@ -3,8 +3,13 @@ package gr.forth.ics.isl.triplestoremethods.impl.virtuoso;
 import gr.forth.ics.isl.triplestoremethods.api.Importer;
 import gr.forth.ics.isl.triplestoremethods.common.RdfFormat;
 import gr.forth.ics.isl.triplestoremethods.exceptions.ImporterException;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import org.apache.log4j.Logger;
 import org.openrdf.model.URI;
 import org.openrdf.repository.Repository;
@@ -58,8 +63,37 @@ public class VirtuosoImporter implements Importer{
     }
 
     @Override
-    public void importResource(String content, String graphspace, RdfFormat format) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void importResource(String content, String graphspace, RdfFormat format) throws ImporterException {
+         logger.debug("Importing content in graphspace ("+graphspace+") with format ("+format+")");
+        try{
+            RepositoryConnection repoConn=this.repo.getConnection();
+            URI graph=this.repo.getValueFactory().createURI(graphspace);
+            InputStream in=new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
+            switch(format){
+                case RDF_XML: 
+                    repoConn.add(in, graphspace, RDFFormat.RDFXML, graph);
+                    break;
+                case NTRIPLES:
+                    repoConn.add(in, graphspace, RDFFormat.NTRIPLES, graph);
+                    break;
+                case TURTLE:
+                    repoConn.add(in, graphspace, RDFFormat.TURTLE, graph);
+                    break;
+                case TRIG:
+                    repoConn.add(in, graphspace, RDFFormat.TRIG, graph);
+                    break;
+            }
+            repoConn.close();
+        }catch(IOException ex){
+            logger.error("The given file does not exist",ex);
+            throw new ImporterException("The given file does not exist", ex);
+        }catch(RDFParseException ex){
+            logger.error("The given file is not a valid RDF document",ex);
+            throw new ImporterException("The given file is not a valid RDF document", ex);
+        }catch(RepositoryException ex){
+            logger.error("An error occured while importing data",ex);
+            throw new ImporterException("An error occured while importing data", ex);
+        }
     }
 
     @Override
