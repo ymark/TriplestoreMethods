@@ -97,13 +97,11 @@ public class VirtuosoImporter implements Importer{
     }
 
     @Override
-    public void importResources(String graphspace, RdfFormat format, File... files) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void importResources(String graphspace, RdfFormat format, String... files) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void importResources(String graphspace, RdfFormat format, File... files) throws ImporterException {
+        for(File file : files){
+            logger.info("Importing the contents of the file: "+file.getAbsolutePath());
+            this.importResource(file, graphspace, format);
+        }
     }
 
     @Override
