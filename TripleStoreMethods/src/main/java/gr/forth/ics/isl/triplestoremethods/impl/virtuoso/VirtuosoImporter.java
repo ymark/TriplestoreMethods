@@ -4,11 +4,7 @@ import gr.forth.ics.isl.triplestoremethods.api.Importer;
 import gr.forth.ics.isl.triplestoremethods.common.RdfFormat;
 import gr.forth.ics.isl.triplestoremethods.exceptions.ImporterException;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import org.apache.log4j.Logger;
 import org.openrdf.model.URI;
 import org.openrdf.repository.Repository;
@@ -34,7 +30,6 @@ public class VirtuosoImporter implements Importer{
         try{
             RepositoryConnection repoConn=this.repo.getConnection();
             URI graph=this.repo.getValueFactory().createURI(graphspace);
-            InputStreamReader in=new InputStreamReader(new FileInputStream(file), "UTF-8");
             switch(format){
                 case RDF_XML: 
                     repoConn.add(file, graphspace, RDFFormat.RDFXML, graph);
