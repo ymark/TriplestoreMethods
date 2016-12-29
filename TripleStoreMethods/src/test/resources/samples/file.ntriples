@@ -1,0 +1,3 @@
+<uuid:AA> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.cidoc-crm.org/cidoc-crm/E22_Man-Made_Object>.
+<uuid:AA> <http://www.cidoc-crm.org/cidoc-crm/P30i_custody_transferred_through> <uuid:AB>.
+<uuid:AB> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.cidoc-crm.org/cidoc-crm/E10_Transfer_of_Custody>.

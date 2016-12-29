@@ -1,0 +1,9 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> 
+
+# default graph 
+	{
+	<uuid:AA> rdf:type <http://www.cidoc-crm.org/cidoc-crm/E22_Man-Made_Object>.
+	<uuid:AA> crm:P30i_custody_transferred_through <uuid:AB>.
+	<uuid:AB> rdf:type <http://www.cidoc-crm.org/cidoc-crm/E10_Transfer_of_Custody>.
+	}
