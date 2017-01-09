@@ -24,7 +24,7 @@ import org.openrdf.rio.turtle.TurtleWriter;
  * @author Yannis Marketakis (marketak 'at' ics 'dot' forth 'dot' gr)
  */
 public class VirtuosoExporter implements Exporter{
-    private static final Logger logger=Logger.getLogger(VirtuosoConnector.class);
+    private static final Logger logger=Logger.getLogger(VirtuosoExporter.class);
     private Repository repo;
     
     public VirtuosoExporter(Repository repository){

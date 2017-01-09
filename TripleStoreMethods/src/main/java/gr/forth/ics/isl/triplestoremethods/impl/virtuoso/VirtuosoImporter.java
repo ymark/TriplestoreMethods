@@ -20,7 +20,7 @@ import org.openrdf.rio.RDFParseException;
  * @author Yannis Marketakis (marketak 'at' ics 'dot' forth 'dot' gr)
  */
 public class VirtuosoImporter implements Importer{
-    private static final Logger logger=Logger.getLogger(VirtuosoConnector.class);
+    private static final Logger logger=Logger.getLogger(VirtuosoImporter.class);
     private Repository repo;
     
     public VirtuosoImporter(Repository repository){
