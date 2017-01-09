@@ -61,7 +61,7 @@ public class VirtuosoConnector implements TripleStoreConnector {
 
     @Override
     public Exporter exporter() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new VirtuosoExporter(this.repo);
     }
 
     @Override
