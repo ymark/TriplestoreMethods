@@ -23,6 +23,13 @@ public interface Query {
      * @throws QueryException for any error that might occur during the evaluation of the query */
     public Collection<Triple<String,String,String>> getTriplesWith(String subject, String predicate, String object, String... graphspaces) throws QueryException;
     
+    /** Returns the triples that exist in the given named graphs that contain the given resource
+     * as a subject (triple = [subject, predicate, object]).
+     * 
+     * @param subject the subject of the triple (it should be the URI of the resource)
+     * @param graphspaces the named graphs where the triples should be searched 
+     * @return a collection of triples containing the given resource as their subject
+     * @throws QueryException for any error that might occur during the evaluation of the query */
     public Collection<Triple<String,String,String>> getTriplesHavingSubject(String subject, String... graphspaces) throws QueryException;
     
     public Collection<Triple<String,String,String>> getTriplesHavingPredicate(String predicate, String... graphspaces) throws QueryException;
