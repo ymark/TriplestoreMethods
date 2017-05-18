@@ -3,6 +3,7 @@ package gr.forth.ics.isl.triplestoremethods.impl.virtuoso;
 import gr.forth.ics.isl.triplestoremethods.api.Query;
 import gr.forth.ics.isl.triplestoremethods.common.Utils;
 import gr.forth.ics.isl.triplestoremethods.exceptions.QueryException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -31,7 +32,7 @@ public class VirtuosoQuery implements Query{
 
     @Override
     public Collection<Triple<String,String,String>> getTriplesWith(String subject, String predicate, String object, String... graphspaces) throws QueryException {
-        logger.debug("Request for retrieving triples with subject ("+subject+"), predicate ("+predicate+"), object ("+object+") in graphspaces ("+graphspaces+")");
+        logger.debug("Request for retrieving triples with subject ("+subject+"), predicate ("+predicate+"), object ("+object+") in graphspaces ("+Arrays.asList(graphspaces)+")");
         Set<Triple<String,String,String>> retCol=new HashSet<>();
         try{
             RepositoryConnection repoConn=this.repo.getConnection();
@@ -85,7 +86,30 @@ public class VirtuosoQuery implements Query{
 
     @Override
     public boolean hasTriplesWith(String subject, String predicate, String object, String... graphspaces) throws QueryException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        logger.debug("Request for checking the existence of triples with subject ("+subject+"), predicate ("+predicate+"), object ("+object+") in graphspaces ("+Arrays.asList(graphspaces)+")");
+        boolean result=false;
+        try{
+            RepositoryConnection repoConn=this.repo.getConnection();
+            String sparqlQuery="ASK ";
+            for(String graphspace : graphspaces){
+                sparqlQuery+="FROM <"+graphspace+"> ";
+            }
+            sparqlQuery+="WHERE{ ?subject ?predicate ?object. "
+                        +"FILTER (?subject=<"+subject+">). "
+                        +"FILTER (?predicate=<"+predicate+">). ";
+            if(Utils.isValidURI(object)){
+                sparqlQuery+="FILTER (?object=<"+object+">)}";
+            }else{
+                sparqlQuery+="FILTER REGEX(?object,\""+object+"\",\"i\")}";
+            }
+            logger.debug("SPAPQL query: "+sparqlQuery);
+            result=repoConn.prepareBooleanQuery(QueryLanguage.SPARQL, sparqlQuery).evaluate();
+            repoConn.close();
+        }catch(RepositoryException | MalformedQueryException | QueryEvaluationException ex){
+            logger.error("An error occured while querying the triplestore",ex);
+            throw new QueryException("An error occured while querying the triplestore",ex);
+        }
+        return result;
     }
 
     @Override
