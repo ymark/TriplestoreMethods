@@ -1,6 +1,7 @@
 package gr.forth.ics.isl.triplestoremethods.impl.virtuoso;
 
 import gr.forth.ics.isl.triplestoremethods.api.Query;
+import gr.forth.ics.isl.triplestoremethods.common.Utils;
 import gr.forth.ics.isl.triplestoremethods.exceptions.QueryException;
 import java.util.Collection;
 import java.util.HashSet;
@@ -8,6 +9,11 @@ import java.util.Map;
 import java.util.Set;
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.log4j.Logger;
+import org.openrdf.query.BindingSet;
+import org.openrdf.query.MalformedQueryException;
+import org.openrdf.query.QueryEvaluationException;
+import org.openrdf.query.QueryLanguage;
+import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
@@ -29,10 +35,28 @@ public class VirtuosoQuery implements Query{
         Set<Triple<String,String,String>> retCol=new HashSet<>();
         try{
             RepositoryConnection repoConn=this.repo.getConnection();
-//            repoConn.get
-
+            String sparqlQuery="SELECT ?subject ?predicate ?object ";
+            for(String graphspace : graphspaces){
+                sparqlQuery+="FROM <"+graphspace+"> ";
+            }
+            sparqlQuery+="WHERE{ ?subject ?predicate ?object. "
+                        +"FILTER (?subject=<"+subject+">). "
+                        +"FILTER (?predicate=<"+predicate+">). ";
+            if(Utils.isValidURI(object)){
+                sparqlQuery+="FILTER (?object=<"+object+">)}";
+            }else{
+                sparqlQuery+="FILTER REGEX(?object,\""+object+"\",\"i\")}";
+            }
+            logger.debug("SPAPQL query: "+sparqlQuery);
+            TupleQueryResult results=repoConn.prepareTupleQuery(QueryLanguage.SPARQL, sparqlQuery).evaluate();
+            while(results.hasNext()){
+                BindingSet result=results.next();
+                retCol.add(Triple.of(result.getValue("subject").stringValue(), 
+                                     result.getValue("predicate").stringValue(),
+                                     result.getValue("object").stringValue()));
+            }
             repoConn.close();
-        }catch(RepositoryException ex){
+        }catch(RepositoryException | MalformedQueryException | QueryEvaluationException ex){
             logger.error("An error occured while querying the triplestore",ex);
             throw new QueryException("An error occured while querying the triplestore",ex);
         }
