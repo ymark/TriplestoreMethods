@@ -94,7 +94,30 @@ public class VirtuosoQuery implements Query{
 
     @Override
     public Collection<Triple<String,String,String>> getTriplesHavingPredicate(String predicate, String... graphspaces) throws QueryException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        logger.debug("Request for retrieving triples with predicate ("+predicate+") in graphspaces ("+Arrays.asList(graphspaces)+")");
+        Set<Triple<String,String,String>> retCol=new HashSet<>();
+        try{
+            RepositoryConnection repoConn=this.repo.getConnection();
+            String sparqlQuery="SELECT ?subject ?predicate ?object ";
+            for(String graphspace : graphspaces){
+                sparqlQuery+="FROM <"+graphspace+"> ";
+            }
+            sparqlQuery+="WHERE{ ?subject ?predicate ?object. "
+                        +"FILTER (?predicate=<"+predicate+">)} ";
+            logger.debug("SPAPQL query: "+sparqlQuery);
+            TupleQueryResult results=repoConn.prepareTupleQuery(QueryLanguage.SPARQL, sparqlQuery).evaluate();
+            while(results.hasNext()){
+                BindingSet result=results.next();
+                retCol.add(Triple.of(result.getValue("subject").stringValue(), 
+                                     result.getValue("predicate").stringValue(),
+                                     result.getValue("object").stringValue()));
+            }
+            repoConn.close();
+        }catch(RepositoryException | MalformedQueryException | QueryEvaluationException ex){
+            logger.error("An error occured while querying the triplestore",ex);
+            throw new QueryException("An error occured while querying the triplestore",ex);
+        }
+        return retCol;
     }
 
     @Override
