@@ -67,6 +67,13 @@ public interface Query {
      * @throws QueryException for any error that might occur during the evaluation of the query */
     public boolean hasTriplesHavingSubject(String subject, String... graphspaces) throws QueryException;
     
+    /** Checks if there are triples that exist in the given named graphs that contain the given resource
+     * as a predicate (triple = [subject, predicate, object]).
+     * 
+     * @param predicate the predicate of the triple (it should be the URI of the resource)
+     * @param graphspaces the named graphs where the triples should be searched 
+     * @return true if there is a triple with the given parameters, otherwise false
+     * @throws QueryException for any error that might occur during the evaluation of the query */
     public boolean hasTriplesHavingPredicate(String predicate, String... graphspaces) throws QueryException;
     
     public boolean hasTriplesHavingObject(String object, String... graphspaces) throws QueryException;
