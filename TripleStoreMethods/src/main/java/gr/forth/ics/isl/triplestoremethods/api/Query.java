@@ -9,6 +9,18 @@ import org.apache.commons.lang3.tuple.Triple;
  * @author Yannis Marketakis (marketak 'at' ics 'dot' forth 'dot' gr)
  */
 public interface Query {
+    
+    /** Returns the triples that exist in the given named graphs that contain the given resources.
+     * The given object can be either the URI of a resource or a literal value.
+     * If the given object is a literal value then the method return all the triples 
+     * that contain it as part of their object value (it does not have to match perfectly). 
+     * 
+     * @param subject the subject of the triple (it should be the URI of the resource)
+     * @param predicate the predicate of the triple (it should be the URI of the resource)
+     * @param object the object of the triple (it may be either the URI of the resource, or a literal value)
+     * @param graphspaces the named graphs where the triples should be searched 
+     * @return a collection of triples containing the given parameters
+     * @throws QueryException for any error that might occur during the evaluation of the query */
     public Collection<Triple<String,String,String>> getTriplesWith(String subject, String predicate, String object, String... graphspaces) throws QueryException;
     
     public Collection<Triple<String,String,String>> getTriplesHavingSubject(String subject, String... graphspaces) throws QueryException;
