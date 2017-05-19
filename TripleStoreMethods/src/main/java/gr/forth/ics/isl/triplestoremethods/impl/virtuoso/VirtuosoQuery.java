@@ -47,14 +47,21 @@ public class VirtuosoQuery implements Query{
                     sparqlQuery+="FROM <"+graphspace+"> ";
                 }
             }
-            sparqlQuery+="WHERE{ ?subject ?predicate ?object. "
-                        +"FILTER (?subject=<"+subject+">). "
-                        +"FILTER (?predicate=<"+predicate+">). ";
-            if(Utils.isValidURI(object)){
-                sparqlQuery+="FILTER (?object=<"+object+">)}";
-            }else{
-                sparqlQuery+="FILTER REGEX(?object,\""+object+"\",\"i\")}";
+            sparqlQuery+="WHERE{ ?subject ?predicate ?object. ";
+            if(subject!=null && !subject.isEmpty()){
+                sparqlQuery+="FILTER (?subject=<"+subject+">). ";
             }
+            if(predicate!=null && !predicate.isEmpty()){
+                sparqlQuery+="FILTER (?predicate=<"+predicate+">). ";
+            }
+            if(object!=null && !object.isEmpty()){
+                if(Utils.isValidURI(object)){
+                    sparqlQuery+="FILTER (?object=<"+object+">)";
+                }else{
+                    sparqlQuery+="FILTER REGEX(?object,\""+object+"\",\"i\")";
+                }
+            }
+            sparqlQuery+="}";
             logger.debug("SPAPQL query: "+sparqlQuery);
             TupleQueryResult results=repoConn.prepareTupleQuery(QueryLanguage.SPARQL, sparqlQuery).evaluate();
             while(results.hasNext()){
