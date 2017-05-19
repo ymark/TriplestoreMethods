@@ -114,5 +114,13 @@ public interface Query {
      * @throws QueryException for any error that might occur during the evaluation of the query */
     public boolean hasTriplesHavingLiteralObject(String literalObject, String... graphspaces) throws QueryException;
     
+    /** Evaluates the given SPARQL expression and returns the results as a collection of Maps. 
+     * The maps in the collection contains key-value pairs where keys refer to the variables that 
+     * exist in the SPARQL query and values contain the actual values of these variables in the result.
+     * For example for the query: select ?s ?p ?o ... the variables will be s, p, and o. 
+     * 
+     * @param sparqlExpression a valid SPARQL expression 
+     * @return the results of the given SPARQL expression as a collection of maps
+     * @throws QueryException for any error that might occur during the evaluation of the query */
     public Collection<Map<String,String>> evaluateSparql(String sparqlExpression) throws QueryException;
 }

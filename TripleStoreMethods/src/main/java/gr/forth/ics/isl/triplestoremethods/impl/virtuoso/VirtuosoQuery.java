@@ -5,6 +5,7 @@ import gr.forth.ics.isl.triplestoremethods.common.Utils;
 import gr.forth.ics.isl.triplestoremethods.exceptions.QueryException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -294,6 +295,27 @@ public class VirtuosoQuery implements Query{
 
     @Override
     public Collection<Map<String, String>> evaluateSparql(String sparqlExpression) throws QueryException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        logger.debug("Request for evaluating the SPARQL query: "+sparqlExpression);
+        Collection<Map<String,String>> retCol=new HashSet<>();
+        try{
+            RepositoryConnection repoConn=this.repo.getConnection();
+            TupleQueryResult results=repoConn.prepareTupleQuery(QueryLanguage.SPARQL, sparqlExpression).evaluate();
+            while(results.hasNext()){
+                BindingSet result=results.next();
+                Map<String,String> tupleResult=new HashMap<>();
+                for(String variable : result.getBindingNames()){
+                    tupleResult.put(variable, result.getValue(variable).stringValue());
+                }
+                retCol.add(tupleResult);
+            }
+            repoConn.close();
+        }catch(RepositoryException ex){
+            logger.error("An error occured while querying the triplestore",ex);
+            throw new QueryException("An error occured while querying the triplestore",ex);
+        }catch(MalformedQueryException | QueryEvaluationException ex){
+            logger.error("The given SPARQL query is invalid",ex);
+            throw new QueryException("The given SPARQL query is invalid",ex);
+        }
+        return retCol;
     }
 }
