@@ -37,10 +37,18 @@ public interface Query {
      * 
      * @param predicate the predicate of the triple (it should be the URI of the resource)
      * @param graphspaces the named graphs where the triples should be searched 
-     * @return a collection of triples containing the given resource as their subject
+     * @return a collection of triples containing the given resource as their predicate
      * @throws QueryException for any error that might occur during the evaluation of the query */
     public Collection<Triple<String,String,String>> getTriplesHavingPredicate(String predicate, String... graphspaces) throws QueryException;
     
+    /** Returns the triples that exist in the given named graphs that contain the given resource
+     * as an object (triple = [subject, predicate, object]). In this case the object should be the URI 
+     * of a resource.
+     * 
+     * @param object the object of the triple (it should be the URI of the resource)
+     * @param graphspaces the named graphs where the triples should be searched 
+     * @return a collection of triples containing the given resource as their object
+     * @throws QueryException for any error that might occur during the evaluation of the query */
     public Collection<Triple<String,String,String>> getTriplesHavingObject(String object, String... graphspaces) throws QueryException;
     
     public Collection<Triple<String,String,String>> getTriplesHavingLiteralObject(String literalObject, String... graphspaces) throws QueryException;
