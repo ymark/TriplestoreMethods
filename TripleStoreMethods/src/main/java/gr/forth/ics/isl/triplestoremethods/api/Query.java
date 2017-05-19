@@ -51,6 +51,15 @@ public interface Query {
      * @throws QueryException for any error that might occur during the evaluation of the query */
     public Collection<Triple<String,String,String>> getTriplesHavingObject(String objectURI, String... graphspaces) throws QueryException;
     
+    /** Returns the triples that exist in the given named graphs that contain the given resource
+     * as an object (triple = [subject, predicate, object]). In this case the object will be treated as a literal 
+     * value, therefore it will return the triples whose object value contains among others the given object.
+     * The method does not perform exact matching and is case insensitive.
+     * 
+     * @param literalObject the object of the triple (it will be treated as a literal value)
+     * @param graphspaces the named graphs where the triples should be searched 
+     * @return a collection of triples containing the given resource as their object
+     * @throws QueryException for any error that might occur during the evaluation of the query */
     public Collection<Triple<String,String,String>> getTriplesHavingLiteralObject(String literalObject, String... graphspaces) throws QueryException;
     
     /** Checks if there is a triple that exist in the given named graphs that contain the given resources.
