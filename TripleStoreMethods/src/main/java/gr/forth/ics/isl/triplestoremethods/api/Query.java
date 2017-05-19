@@ -103,6 +103,15 @@ public interface Query {
      * @throws QueryException for any error that might occur during the evaluation of the query */
     public boolean hasTriplesHavingObject(String objectURI, String... graphspaces) throws QueryException;
     
+    /** Checks if there are triples that exist in the given named graphs that contain the given resource
+     * as an object (triple = [subject, predicate, object]). In this case the object will be treated as a literal 
+     * value, therefore it will check if there are triples whose object value contains among others the given object.
+     * The method does not perform exact matching and is case insensitive.
+     * 
+     * @param literalObject the object of the triple (it will be treated as a literal value)
+     * @param graphspaces the named graphs where the triples should be searched 
+     * @return true if there is a triple with the given parameters, otherwise false
+     * @throws QueryException for any error that might occur during the evaluation of the query */
     public boolean hasTriplesHavingLiteralObject(String literalObject, String... graphspaces) throws QueryException;
     
     public Collection<Map<String,String>> evaluateSparql(String sparqlExpression) throws QueryException;
