@@ -45,11 +45,11 @@ public interface Query {
      * as an object (triple = [subject, predicate, object]). In this case the object should be the URI 
      * of a resource.
      * 
-     * @param object the object of the triple (it should be the URI of the resource)
+     * @param objectURI the object of the triple (it should be the URI of the resource)
      * @param graphspaces the named graphs where the triples should be searched 
      * @return a collection of triples containing the given resource as their object
      * @throws QueryException for any error that might occur during the evaluation of the query */
-    public Collection<Triple<String,String,String>> getTriplesHavingObject(String objectUri, String... graphspaces) throws QueryException;
+    public Collection<Triple<String,String,String>> getTriplesHavingObject(String objectURI, String... graphspaces) throws QueryException;
     
     public Collection<Triple<String,String,String>> getTriplesHavingLiteralObject(String literalObject, String... graphspaces) throws QueryException;
     
@@ -88,11 +88,11 @@ public interface Query {
      * as an object (triple = [subject, predicate, object]). The object should be the URI 
      * of a resource
      * 
-     * @param object the object of the triple (it should be the URI of the resource)
+     * @param objectURI the object of the triple (it should be the URI of the resource)
      * @param graphspaces the named graphs where the triples should be searched 
      * @return true if there is a triple with the given parameters, otherwise false
      * @throws QueryException for any error that might occur during the evaluation of the query */
-    public boolean hasTriplesHavingObject(String objectUri, String... graphspaces) throws QueryException;
+    public boolean hasTriplesHavingObject(String objectURI, String... graphspaces) throws QueryException;
     
     public boolean hasTriplesHavingLiteralObject(String literalObject, String... graphspaces) throws QueryException;
     
