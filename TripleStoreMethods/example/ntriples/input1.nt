@@ -1,0 +1,8 @@
+<http://localhost/person/yannis.a> <http://www.w3.org/2000/01/rdf-schema#type> <http://localhost/class/Person>.
+<http://localhost/person/yannis.a> <http://www.w3.org/2000/01/rdf-schema#label> "yannis a".
+<http://localhost/person/yannis.a> <http://localhost/property/drives> <http://localhost/vehicle/insignia>.
+<http://localhost/vehicle/insignia> <http://localhost/property/has_brand> <http://localhost/brand/opel>.
+<http://localhost/vehicle/insignia> <http://www.w3.org/2000/01/rdf-schema#label> "Opel Insignia".
+<http://localhost/vehicle/insignia> <http://localhost/property/has_horsepower> "180 ps".
+<http://localhost/person/yannis.a> <http://localhost/property/lives> <http://localhost/place/heraklion>.
+<http://localhost/place/heraklion> <http://www.w3.org/2000/01/rdf-schema#label> "Heraklion".

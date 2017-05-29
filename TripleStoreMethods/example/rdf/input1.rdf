@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+<rdf:Description rdf:about="http://localhost/person/yannis.a">
+	<rdfs:label>yannis a</rdfs:label>
+	<rdfs:type rdf:resource="http://localhost/class/Person"/>
+	<lives xmlns="http://localhost/property/" rdf:resource="http://localhost/place/heraklion"/>
+	<drives xmlns="http://localhost/property/" rdf:resource="http://localhost/vehicle/insignia"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://localhost/place/heraklion">
+	<rdfs:label>Heraklion</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://localhost/vehicle/insignia">
+	<rdfs:label>Opel Insignia</rdfs:label>
+	<has_brand xmlns="http://localhost/property/" rdf:resource="http://localhost/brand/opel"/>
+	<has_horsepower xmlns="http://localhost/property/">180 ps</has_horsepower>
+</rdf:Description>
+
+</rdf:RDF>
