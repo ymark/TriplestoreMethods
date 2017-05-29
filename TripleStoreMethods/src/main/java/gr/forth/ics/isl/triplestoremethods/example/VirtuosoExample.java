@@ -33,7 +33,7 @@ public class VirtuosoExample {
     
     public static void main(String[] args) throws TripleStoreConnectionException, ImporterException, ExporterException, FileNotFoundException, UnsupportedEncodingException, IOException, QueryException{
         TripleStoreConnector connector=TripleStoreFactory.connectToVirtuoso("http://localhost", 1111, "user", "pass");
-        
+
         imports(connector);
         exports(connector);
         query(connector);
@@ -56,7 +56,7 @@ public class VirtuosoExample {
         connector.importer().importResources(NAMED_GRAPH, RdfFormat.RDF_XML, new File(INPUT_FILE1_RDF), new File(INPUT_FILE2_RDF));
         
         /* Import from folder */
-        connector.importer().importResourcesFromFolder(new File(INPUT_FOLDER_NTRIPLES), NAMED_GRAPH, false, RdfFormat.NTRIPLES);
+        connector.importer().importResourcesFromFolder(new File(INPUT_FOLDER_NTRIPLES), NAMED_GRAPH, true, RdfFormat.NTRIPLES);
     }
     
     private static void exports(TripleStoreConnector connector) throws ImporterException, ExporterException{
