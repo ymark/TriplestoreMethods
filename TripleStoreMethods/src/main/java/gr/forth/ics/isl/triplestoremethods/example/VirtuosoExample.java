@@ -70,5 +70,50 @@ public class VirtuosoExample {
     private static void query(TripleStoreConnector connector) throws QueryException{
         Collection<Triple<String,String,String>> results=connector.query().getTriplesWith(null, null, null, NAMED_GRAPH);
         System.out.println("Results size: "+results.size());
+        
+        results=connector.query().getTriplesWith("http://localhost/person/yannis.a", null, null, NAMED_GRAPH);
+        System.out.println("Results size: "+results.size());
+        
+        results=connector.query().getTriplesWith(null, "http://localhost/property/lives", null, NAMED_GRAPH);
+        System.out.println("Results size: "+results.size());
+        
+        results=connector.query().getTriplesWith(null, null, "heraklion", NAMED_GRAPH);
+        System.out.println("Results size: "+results.size());
+        
+        results=connector.query().getTriplesHavingSubject("http://localhost/person/yannis.a",NAMED_GRAPH);
+        System.out.println("Results size: "+results.size());
+        
+        results=connector.query().getTriplesHavingPredicate("http://localhost/property/lives",NAMED_GRAPH);
+        System.out.println("Results size: "+results.size());
+        
+        results=connector.query().getTriplesHavingObject("http://localhost/place/heraklion",NAMED_GRAPH);
+        System.out.println("Results size: "+results.size());
+        
+        results=connector.query().getTriplesHavingLiteralObject("yannis", NAMED_GRAPH);
+        System.out.println("Results size: "+results.size());
+        
+        boolean result=connector.query().hasTriplesWith(null, null, null, NAMED_GRAPH);
+        System.out.println("Result: "+result);
+        
+        result=connector.query().hasTriplesWith("http://localhost/person/yannis", null, null, NAMED_GRAPH);
+        System.out.println("Results: "+result);
+        
+        result=connector.query().hasTriplesWith(null, "http://localhost/property/lives", null, NAMED_GRAPH);
+        System.out.println("Result: "+result);
+        
+        result=connector.query().hasTriplesWith(null, null, "heraklion", NAMED_GRAPH);
+        System.out.println("Result: "+result);
+        
+        result=connector.query().hasTriplesHavingSubject("http://localhost/person/yannis.a",NAMED_GRAPH);
+        System.out.println("Result: "+result);
+        
+        result=connector.query().hasTriplesHavingPredicate("http://localhost/property/live",NAMED_GRAPH);
+        System.out.println("Result: "+result);
+        
+        result=connector.query().hasTriplesHavingObject("http://localhost/place/heraklion",NAMED_GRAPH);
+        System.out.println("Result: "+result);
+        
+        result=connector.query().hasTriplesHavingLiteralObject("yannis", NAMED_GRAPH);
+        System.out.println("Result: "+result);
     }
 }
