@@ -19,19 +19,21 @@ import org.eclipse.jetty.client.HttpClient;
  */
 public class BlazegraphConnector implements TripleStoreConnector {
     private static final Logger logger=Logger.getLogger(BlazegraphConnector.class);
-    private RemoteRepositoryManager repo;
+    private String serviceURL;
     
-    public BlazegraphConnector(String host, int port, String username, String password) throws TripleStoreConnectionException{
+    public BlazegraphConnector(String host) throws TripleStoreConnectionException{
         if(host==null || host.isEmpty()){
             throw new TripleStoreConnectionException("The host of the Blazegraph triplestore is mandatory and cannot be null or empty");
         }
         logger.debug("Connecting to Blazegraph["+host+"]");
         
         try{
+            this.serviceURL=host;
             HttpClient httpClient=new HttpClient();
             httpClient.start();
             ExecutorService executor=Executors.newCachedThreadPool();
-            this.repo = new RemoteRepositoryManager(host, httpClient, executor);
+            RemoteRepositoryManager repoManager = new RemoteRepositoryManager(host, httpClient, executor);
+            executor.shutdownNow();
             httpClient.stop();
             httpClient.destroy();
         }catch(Exception ex){
@@ -42,7 +44,7 @@ public class BlazegraphConnector implements TripleStoreConnector {
 
     @Override
     public Importer importer() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new BlazegraphImporter(this.serviceURL);
     }
 
     @Override
