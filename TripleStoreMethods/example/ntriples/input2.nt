@@ -1,0 +1,8 @@
+<http://localhost/person/yannis.b> <http://www.w3.org/2000/01/rdf-schema#type> <http://localhost/class/Person>.
+<http://localhost/person/yannis.b> <http://www.w3.org/2000/01/rdf-schema#label> "yannis b".
+<http://localhost/person/yannis.b> <http://localhost/property/lives> <http://localhost/place/athens>.
+<http://localhost/place/athens> <http://www.w3.org/2000/01/rdf-schema#label> "Athens".
+<http://localhost/person/yannis.b> <http://localhost/property/drives> <http://localhost/vehicle/tdm>.
+<http://localhost/vehicle/tdm> <http://localhost/property/has_brand> <http://localhost/brand/yamaha>.
+<http://localhost/vehicle/tdm> <http://www.w3.org/2000/01/rdf-schema#label> "Yamaha TDM".
+<http://localhost/vehicle/tdm> <http://localhost/property/has_horsepower> "80 ps".
