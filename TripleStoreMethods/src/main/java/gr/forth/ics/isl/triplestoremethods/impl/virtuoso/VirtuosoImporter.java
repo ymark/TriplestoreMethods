@@ -1,13 +1,16 @@
 package gr.forth.ics.isl.triplestoremethods.impl.virtuoso;
 
 import gr.forth.ics.isl.triplestoremethods.api.Importer;
+import gr.forth.ics.isl.triplestoremethods.common.FilesMiner;
 import gr.forth.ics.isl.triplestoremethods.common.RdfFormat;
+import gr.forth.ics.isl.triplestoremethods.exceptions.FileMinerException;
 import gr.forth.ics.isl.triplestoremethods.exceptions.ImporterException;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import org.apache.log4j.Logger;
 import org.openrdf.model.URI;
 import org.openrdf.repository.Repository;
@@ -103,8 +106,16 @@ public class VirtuosoImporter implements Importer{
     }
 
     @Override
-    public void importResourcesFromFolder(File folder, String graphspace, boolean recursiveImport, RdfFormat format) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void importResourcesFromFolder(File folder, String graphspace, boolean recursiveImport, RdfFormat format) throws ImporterException {
+        try{
+            List<File> files=FilesMiner.traverseFolderContents(folder.getAbsolutePath(), recursiveImport);
+            logger.debug("Found "+files.size()+" files for importing");
+            for(File file : files){
+                this.importResource(file, graphspace, format);
+            }
+        }catch(FileMinerException ex){
+            logger.error("An error occured while importing data",ex);
+            throw new ImporterException("An error occured while importing data", ex);
+        }
     }
-
 }

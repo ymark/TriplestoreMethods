@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+<rdf:Description rdf:about="http://localhost/person/yannis.b">
+	<rdfs:label>yannis b</rdfs:label>
+	<rdfs:type rdf:resource="http://localhost/class/Person"/>
+	<lives xmlns="http://localhost/property/" rdf:resource="http://localhost/place/athens"/>
+	<drives xmlns="http://localhost/property/" rdf:resource="http://localhost/vehicle/tdm"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://localhost/place/athens">
+	<rdfs:label>Athens</rdfs:label>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://localhost/vehicle/tdm">
+	<rdfs:label>Yamaha TDM</rdfs:label>
+	<has_brand xmlns="http://localhost/property/" rdf:resource="http://localhost/brand/yamaha"/>
+	<has_horsepower xmlns="http://localhost/property/">80 ps</has_horsepower>
+</rdf:Description>
+
+</rdf:RDF>
