@@ -8,7 +8,6 @@ import gr.forth.ics.isl.triplestoremethods.common.RdfFormat;
 import gr.forth.ics.isl.triplestoremethods.exceptions.ImporterException;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
@@ -39,7 +38,7 @@ public class BlazegraphImporter implements Importer{
             httpClient.start();
             final RemoteRepositoryManager repoManager = new RemoteRepositoryManager(this.serviceUrl, httpClient, executor);
             this.namespaceConnect(repoManager,graphspace);
-            loadDataFromResource(repoManager,graphspace, file.getAbsolutePath(), RDFFormat.N3);
+            loadDataFromInputStream(repoManager,graphspace, new FileInputStream(file), RDFFormat.N3);
             httpClient.stop();
             repoManager.close();
         }catch(Exception ex){
@@ -96,16 +95,26 @@ public class BlazegraphImporter implements Importer{
         }
     }
 
-    private void loadDataFromResource(RemoteRepositoryManager repoManager, String namespace, String resource, RDFFormat format) throws Exception{
-        logger.debug("Ingesting source  "+resource+" ...");
-        final InputStream is = new FileInputStream(new File(resource));
-        if (is == null) {
-            throw new IOException("Could not locate resource: " + resource);
-        }
+//    private void loadDataFromResource(RemoteRepositoryManager repoManager, String namespace, String resource, RDFFormat format) throws Exception{
+//        logger.debug("Ingesting source  "+resource+" ...");
+//        final InputStream is = new FileInputStream(new File(resource));
+//        if (is == null) {
+//            throw new IOException("Could not locate resource: " + resource);
+//        }
+//        try {
+//            repoManager.getRepositoryForNamespace(namespace).add(new RemoteRepository.AddOp(is, format));
+//        } finally {
+//            is.close();
+//        }
+//        logger.debug("Done");
+//    }
+
+    private void loadDataFromInputStream(RemoteRepositoryManager repoManager, String namespace, InputStream inputStream, RDFFormat format) throws Exception{
+        logger.debug("Loading data from inputstream");
         try {
-            repoManager.getRepositoryForNamespace(namespace).add(new RemoteRepository.AddOp(is, format));
+            repoManager.getRepositoryForNamespace(namespace).add(new RemoteRepository.AddOp(inputStream, format));
         } finally {
-            is.close();
+            inputStream.close();
         }
         logger.debug("Done");
     }
