@@ -1,33 +1,22 @@
 package gr.forth.ics.isl.triplestoremethods.impl.blazegraph;
 
 import com.bigdata.rdf.sail.webapp.SD;
-import com.bigdata.rdf.sail.webapp.client.ConnectOptions;
-import com.bigdata.rdf.sail.webapp.client.JettyResponseListener;
 import com.bigdata.rdf.sail.webapp.client.RemoteRepository;
 import com.bigdata.rdf.sail.webapp.client.RemoteRepositoryManager;
 import gr.forth.ics.isl.triplestoremethods.api.Importer;
 import gr.forth.ics.isl.triplestoremethods.common.RdfFormat;
 import gr.forth.ics.isl.triplestoremethods.exceptions.ImporterException;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.client.HttpClient;
 import org.openrdf.model.Statement;
-import org.openrdf.model.URI;
 import org.openrdf.query.GraphQueryResult;
-import org.openrdf.repository.Repository;
-import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.RepositoryException;
 import org.openrdf.rio.RDFFormat;
-import org.openrdf.rio.RDFParseException;
 
 /**
  * @author Yannis Marketakis (marketak 'at' ics 'dot' forth 'dot' gr)
@@ -49,7 +38,7 @@ public class BlazegraphImporter implements Importer{
             httpClient.start();
             final RemoteRepositoryManager repoManager = new RemoteRepositoryManager(this.serviceUrl, httpClient, executor);
             this.namespaceConnect(repoManager,graphspace);
-            loadDataFromResource(repoManager,graphspace, file.getAbsolutePath(), RDFFormat.N3);
+            loadDataFromInputStream(repoManager,graphspace, new FileInputStream(file), RDFFormat.N3);
             httpClient.stop();
             repoManager.close();
         }catch(Exception ex){
@@ -106,16 +95,26 @@ public class BlazegraphImporter implements Importer{
         }
     }
 
-    private void loadDataFromResource(RemoteRepositoryManager repoManager, String namespace, String resource, RDFFormat format) throws Exception{
-        logger.debug("Ingesting source  "+resource+" ...");
-        final InputStream is = new FileInputStream(new File(resource));
-        if (is == null) {
-            throw new IOException("Could not locate resource: " + resource);
-        }
+//    private void loadDataFromResource(RemoteRepositoryManager repoManager, String namespace, String resource, RDFFormat format) throws Exception{
+//        logger.debug("Ingesting source  "+resource+" ...");
+//        final InputStream is = new FileInputStream(new File(resource));
+//        if (is == null) {
+//            throw new IOException("Could not locate resource: " + resource);
+//        }
+//        try {
+//            repoManager.getRepositoryForNamespace(namespace).add(new RemoteRepository.AddOp(is, format));
+//        } finally {
+//            is.close();
+//        }
+//        logger.debug("Done");
+//    }
+
+    private void loadDataFromInputStream(RemoteRepositoryManager repoManager, String namespace, InputStream inputStream, RDFFormat format) throws Exception{
+        logger.debug("Loading data from inputstream");
         try {
-            repoManager.getRepositoryForNamespace(namespace).add(new RemoteRepository.AddOp(is, format));
+            repoManager.getRepositoryForNamespace(namespace).add(new RemoteRepository.AddOp(inputStream, format));
         } finally {
-            is.close();
+            inputStream.close();
         }
         logger.debug("Done");
     }
